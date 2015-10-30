@@ -47,12 +47,13 @@ None
 
 Example Playbook
 ----------------
-Galaxy
+#### Galaxy
+-----------
     - hosts: servers
       roles:
          - { role: mrlesmithjr.domain-join }
-------
-GitHub
+#### GitHub
+-----------
     - hosts: servers
       roles:
         - ansible-domain-join
