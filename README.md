@@ -30,6 +30,7 @@ pbis_debian_file: pbis-open-8.3.0.3287.linux.x86_64.deb
 #pbis_debian_url: http://download.beyondtrust.com/PBISO/8.2.2/linux.deb.x64
 pbis_debian_url: http://download.beyondtrust.com/PBISO/8.3
 pbis_dl_dir: /opt  #defines where PBIS will be downloaded to and executed from
+pri_domain_name: example.org  #defines primary domain name.
 sudo_ad_group_name: '\Domain^Admins ALL=(ALL) ALL'
 sudo_ad_group: '{{ sudo_ad_name }}{{ sudo_ad_group_name }}'
 sudo_ad_name: '%{{ ad_domain_netbios }}\'
