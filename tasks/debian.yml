@@ -1,8 +1,8 @@
 ---
 - name: debian | downloading pbis-open
   get_url:
-    url: {{ pbis_debian_url }}/{{ pbis_debian_download }}
-    dest: {{ pbis_dl_dir }}/{{ pbis_debian_download }}
+    url: "{{ pbis_debian_url }}/{{ pbis_debian_download }}"
+    dest: "{{ pbis_dl_dir }}/{{ pbis_debian_download }}"
     mode: 0744
 
 - name: debian | extracting pbis-open
@@ -33,7 +33,7 @@
 - name: debian | granting sudo rights to Domain Groups
   lineinfile:
     dest: /etc/sudoers
-    line: "%{{ ad_domain_netbios }}\\\\{{ item }} ALL=(ALL) ALL"
+    line: "%{{ ad_domain_netbios }}\\\\\\{{ item }} ALL=(ALL) ALL"
     state: present
     validate: 'visudo -cf %s'
   with_items: domain_sudo_groups
