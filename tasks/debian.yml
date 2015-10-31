@@ -1,12 +1,19 @@
 ---
 - name: debian | downloading pbis-open
-  get_url: url={{ pbis_debian_url }}/{{ pbis_debian_download }} dest={{ pbis_dl_dir }}/{{ pbis_debian_download }} mode=0744
+  get_url:
+    url: {{ pbis_debian_url }}/{{ pbis_debian_download }}
+    dest: {{ pbis_dl_dir }}/{{ pbis_debian_download }}
+    mode: 0744
 
 - name: debian | extracting pbis-open
   shell: '{{ pbis_dl_dir }}/{{ pbis_debian_download }} --noexec --target {{ pbis_dl_dir }}/{{ pbis_debian_file }}'
+  args:
+    creates: '{{ pbis_dl_dir }}/{{ pbis_debian_file }}/install.sh'
 
 - name: debian | installing pbis-open
   shell: '{{ pbis_dl_dir }}/{{ pbis_debian_file }}/install.sh --no-legacy install'
+  args:
+    creates: /opt/pbis/bin/domainjoin-cli
 
 - name: debian | checking the Domain status
   shell: /opt/pbis/bin/lsa get-status |grep Netbios |awk '{print $3}'
@@ -23,11 +30,10 @@
     state: present
     validate: "/usr/sbin/visudo -cf %s"
 
-- name: debian | creating sudoers
-  template:
-    src: etc/sudoers.d.j2
-    dest: "/etc/sudoers.d/{{ sudoers_filename }}"
-    mode: 0440
-    owner: root
-    group: root
-    validate: "/usr/sbin/visudo -cf %s"
+- name: debian | granting sudo rights to Domain Groups
+  lineinfile:
+    dest: /etc/sudoers
+    line: "%{{ ad_domain_netbios }}\\\\{{ item }} ALL=(ALL) ALL"
+    state: present
+    validate: 'visudo -cf %s'
+  with_items: domain_sudo_groups
